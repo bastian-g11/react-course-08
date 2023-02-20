@@ -9,14 +9,13 @@ const UserForm = ({ onAddUser }) => {
   const nameInputRef = useRef();
   const ageInputRef = useRef();
 
-  const [enteredName, setEnteredName] = useState("");
-  const [enteredAge, setEnteredAge] = useState("");
   const [error, setError] = useState({ title: "", message: "" });
   const [showModal, setShowModal] = useState(false);
 
   const formSubmitHandler = (event) => {
-    console.log(nameInputRef);
     event.preventDefault();
+    const enteredName = nameInputRef.current.value;
+    const enteredAge = ageInputRef.current.value;
     if (enteredName.trim().length === 0 || enteredAge.trim().length === 0) {
       setError({
         title: "Invalid input",
@@ -38,23 +37,8 @@ const UserForm = ({ onAddUser }) => {
     }
 
     onAddUser(enteredName, enteredAge);
-    setEnteredAge("");
-    setEnteredName("");
-  };
-
-  const nameChangeHandler = (event) => {
-    if (event.target.value.trim().length > 0) {
-      setError(true);
-    }
-
-    setEnteredName(event.target.value);
-  };
-
-  const ageChangeHandler = (event) => {
-    if (event.target.value.trim().length > 0) {
-      setError(true);
-    }
-    setEnteredAge(event.target.value);
+    nameInputRef.current.value = "";
+    ageInputRef.current.value = "";
   };
 
   const errorHandler = () => {
@@ -74,18 +58,14 @@ const UserForm = ({ onAddUser }) => {
         <form onSubmit={formSubmitHandler}>
           <Input
             name="username"
-            value={enteredName}
             label="Username"
             type="text"
-            onChange={nameChangeHandler}
             inputRef={nameInputRef}
           />
           <Input
             name="age"
-            value={enteredAge}
             label="Age (Years)"
             type="number"
-            onChange={ageChangeHandler}
             inputRef={ageInputRef}
           />
           <Button type="submit">Add User</Button>
